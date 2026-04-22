@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Non-Surgical Face & Neck Lift in Naples, FL | Anavaya</title>
+  <meta name="description" content="Lift and tighten your face and neck with Anavaya's non-surgical lift. $79 single session or 5 sessions for $350. Naples, FL." />
+  <link rel="icon" href="images/favicon.jpg" type="image/jpeg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Meta (Facebook) Pixel -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1178133073434960');
+    fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1178133073434960&ev=PageView&noscript=1"/></noscript>
+
+  <!-- GoHighLevel form embed script -->
+  <script src="https://link.msgsndr.com/js/form_embed.js"></script>
+</head>
+<body>
+
+  <!-- Top announcement bar -->
+  <div class="top-bar">
+    <span>✨ Limited Time Offer — $79 Single Session or 5 for $350 ✨</span>
+  </div>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Anavaya Exclusive · Naples, FL</p>
+        <h1>Non-Surgical Face & Neck Lift</h1>
+        <p class="hero-sub">Firm, Lifted & Youthful — Without Surgery or Downtime</p>
+        <ul class="hero-bullets">
+          <li>Visible lift after just one session</li>
+          <li>Smooths jawline, cheeks & neck</li>
+          <li>Zero downtime · No needles · No harsh chemicals</li>
+        </ul>
+        <div class="price-pill">
+          <span class="price-amount">$79</span>
+          <span class="price-divider">or</span>
+          <span class="price-amount">5 for $350</span>
+        </div>
+        <a href="#book" class="btn btn-primary">Book Your Session Now 👇</a>
+        <p class="hero-foot">Pay upon arrival · Appointments filling quickly</p>
+      </div>
+      <div class="hero-image">
+        <img src="images/promo-hero.jpg" alt="Non-surgical face and neck lift treatment at Anavaya" />
+      </div>
+    </div>
+  </header>
+
+  <!-- BOOKING ANCHOR -->
+  <section id="book" class="booking">
+    <div class="container">
+      <h2 class="center">Choose a Date & Time for Your Appointment</h2>
+      <p class="section-lead center">Reserve your non-surgical lift session in seconds. Pay upon arrival at our Naples studio.</p>
+
+      <!-- Step indicator -->
+      <ol class="step-indicator" aria-label="Booking steps">
+        <li class="step active" data-step="1"><span>1</span> Date</li>
+        <li class="step" data-step="2"><span>2</span> Time</li>
+        <li class="step" data-step="3"><span>3</span> Your Info</li>
+      </ol>
+
+      <div class="booking-card">
+        <div class="booking-grid">
+
+          <!-- Calendar column -->
+          <div class="cal-col">
+            <div class="cal-header">
+              <h3 class="cal-title" id="calTitle">Pick a Date</h3>
+            </div>
+            <div class="day-row" id="dayRow" role="grid"></div>
+            <p class="cal-hint">Choose any of the next 6 available days</p>
+          </div>
+
+          <!-- Time + form column -->
+          <div class="slot-col">
+            <div class="slot-header">
+              <p class="eyebrow">Selected Date</p>
+              <p class="selected-date" id="selectedDateLabel">Pick a date to see available times</p>
+            </div>
+
+            <div class="time-slots" id="timeSlots" hidden>
+              <p class="slot-label">Available Times</p>
+              <div class="slot-grid"></div>
+            </div>
+
+            <form class="contact-form" id="contactForm" hidden>
+              <div class="summary">
+                <p class="summary-line"><strong>Appointment:</strong> <span id="summaryDateTime"></span></p>
+                <p class="summary-line"><strong>Service:</strong> Non-Surgical Face & Neck Lift</p>
+              </div>
+
+              <label>
+                Full Name
+                <input type="text" name="name" id="fName" required placeholder="Jane Doe" autocomplete="name" />
+              </label>
+              <label>
+                Phone
+                <input type="tel" name="phone" id="fPhone" required placeholder="(239) 234-6001" autocomplete="tel" />
+              </label>
+              <label>
+                Email
+                <input type="email" name="email" id="fEmail" required placeholder="you@email.com" autocomplete="email" />
+              </label>
+
+              <button type="submit" class="btn btn-primary btn-lg" id="confirmBtn">Confirm My Appointment</button>
+              <p class="form-foot">Pay upon arrival · You'll receive a confirmation by text & email</p>
+            </form>
+
+            <div class="booking-success" id="bookingSuccess" hidden>
+              <div class="success-icon">✓</div>
+              <h3>Appointment Confirmed!</h3>
+              <p id="successText">Thank you. We'll see you soon at our Naples studio.</p>
+            </div>
+
+            <div class="booking-error" id="bookingError" hidden>
+              <p>We couldn't complete your booking just now. Please call <a href="tel:+12392346001">(239) 234-6001</a> or try again.</p>
+              <p class="err-detail" style="font-size:0.78rem; opacity:0.7; margin-top:6px;"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICE INTRO -->
+  <section class="service">
+    <div class="container service-grid">
+      <div>
+        <p class="eyebrow">Anavaya Signature</p>
+        <h2>The Non-Surgical Face & Neck Lift</h2>
+        <p>A luxurious, science-backed treatment designed to lift sagging skin, redefine the jawline, and restore youthful contour across the face and neck — all without incisions, injections, or recovery time. Guests leave glowing, refreshed, and visibly lifted.</p>
+        <a href="#book" class="btn btn-outline">Reserve My Spot 👇</a>
+      </div>
+      <div class="service-image">
+        <img src="images/spa-interior.jpg" alt="Anavaya spa interior in Naples, Florida" />
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS -->
+  <section class="benefits">
+    <div class="container benefits-grid">
+      <div class="benefits-image">
+        <img src="images/benefits-treatment.jpg" alt="Face and neck lift treatment in progress" />
+      </div>
+      <div>
+        <h2>Explore the Benefits of the Anavaya Lift</h2>
+        <ul class="check-list">
+          <li>Tightens sagging skin on the face, jawline, and neck</li>
+          <li>Smooths fine lines, wrinkles, and creases</li>
+          <li>Redefines contour for a sculpted, youthful profile</li>
+          <li>Boosts collagen and natural elasticity</li>
+          <li>Relaxing, gentle, and completely non-invasive</li>
+          <li>Zero downtime — return to your day immediately</li>
+        </ul>
+        <a href="#book" class="btn btn-primary">Book Now 👇</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="results">
+    <div class="container">
+      <p class="eyebrow center">See the Transformation</p>
+      <h2 class="center">Real Face & Neck Lift Results</h2>
+      <p class="section-lead center">Visible lifting, tightening, and contouring — captured in our Naples studio.</p>
+      <div class="results-grid">
+        <figure class="result-card">
+          <img src="images/transformation-1.jpg" alt="Glowing, lifted skin after a non-surgical face treatment" />
+          <figcaption>
+            <span class="result-tag">Single $79 Session</span>
+            Smoother jawline, lifted cheeks, and visibly firmer skin after just one Anavaya Face & Neck Lift session.
+          </figcaption>
+        </figure>
+        <figure class="result-card">
+          <img src="images/transformation-2.jpg" alt="Sculpted neck and youthful contour after a non-surgical lift series" />
+          <figcaption>
+            <span class="result-tag">5-Session Package · $350</span>
+            Tighter neck, sculpted profile, and a noticeably more youthful contour after a full lift series.
+          </figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING CTA -->
+  <section class="price-cta">
+    <div class="container center">
+      <p class="eyebrow light">Exclusive Deal · Limited Time Offer</p>
+      <h2>What $79 Can Do for You</h2>
+      <p class="section-lead light">Experience the Anavaya non-surgical lift for only <strong>$79</strong> for a single session — or save with <strong>5 sessions for $350</strong>. Appointments are limited, so reserve yours today.</p>
+      <a href="#book" class="btn btn-light">Book Your Lift Session 👇</a>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about">
+    <div class="container about-grid">
+      <div>
+        <p class="eyebrow">About Us</p>
+        <h2>Welcome to Anavaya</h2>
+        <p>At Anavaya, we blend advanced skincare science with the calm of a luxury studio to deliver visible, lasting results. Our signature non-surgical face and neck lift is designed for guests who want a firmer, more youthful look without the cost or recovery of surgery. Every session is personalized, relaxing, and built around you.</p>
+        <p>Visit us at our 5th Avenue studio in the heart of Naples and discover a more confident version of yourself.</p>
+      </div>
+      <div class="about-image">
+        <img src="images/spa-interior.jpg" alt="Anavaya studio in downtown Naples" />
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIAL -->
+  <section class="testimonial">
+    <div class="container center">
+      <p class="eyebrow">Testimonial</p>
+      <blockquote>
+        "After just three sessions my jawline looks sharper and my neck feels tighter. Friends keep asking what I've been doing differently — I tell them Anavaya."
+      </blockquote>
+      <cite>— Monica S., Naples</cite>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section class="reviews">
+    <div class="container">
+      <p class="eyebrow center">5-Star Google Reviews</p>
+      <h2 class="center">Real Clients, Real Reviews</h2>
+      <div class="reviews-grid">
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>"Walked out looking ten years younger. Completely painless and I was back to my errands within the hour. Highly recommend."</p>
+          <span class="reviewer">— Sarah L.</span>
+        </article>
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>"The studio is gorgeous and the results are the real deal. My jawline has never looked better. Booking my 5-pack today."</p>
+          <span class="reviewer">— Dana K.</span>
+        </article>
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>"Best non-surgical lift in Naples by a mile. Professional team, beautiful space, and visible results after one visit."</p>
+          <span class="reviewer">— Carolina P.</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta">
+    <div class="container center">
+      <h2>Your Lifted, Youthful Look Starts Today</h2>
+      <p class="section-lead">Claim your $79 session or save with a 5-session package before appointments run out.</p>
+      <a href="#book" class="btn btn-primary btn-lg">Book My Appointment 👇</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h3>Location</h3>
+        <p>472 5th Avenue South<br />Naples, FL 34102</p>
+      </div>
+      <div>
+        <h3>Email</h3>
+        <p><a href="mailto:anavayanaples@gmail.com">anavayanaples@gmail.com</a></p>
+      </div>
+      <div>
+        <h3>Phone</h3>
+        <p><a href="tel:+12392346001">(239) 234-6001</a></p>
+      </div>
+    </div>
+    <div class="container copyright">
+      <p>&copy; <span id="year"></span> Anavaya. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Track Lead when any "Book" CTA is clicked (top-of-funnel signal)
+    document.querySelectorAll('a[href="#book"]').forEach(function (a) {
+      a.addEventListener('click', function () { if (window.fbq) fbq('track', 'InitiateCheckout'); });
+    });
+  </script>
+
+  <!--
+    SECURITY NOTE: API key below is exposed to anyone viewing source.
+    For production, proxy these calls through a server (Cloudflare Worker / Vercel function)
+    so the PIT stays private. Anyone with this token can act on your GHL location.
+  -->
+  <script>
+    const GHL = {
+      locationId: 'SQpwKCPhe2vgUlNkn9eb',
+      calendarId: 'utrJOMMkTNJ1h220E5qa',
+      userId:     '2tQreqXcDpaAiSBqlK7T',
+      apiKey:     'pit-fb20953a-81b4-47aa-9464-56f64322d2e3',
+      apiBase:    'https://services.leadconnectorhq.com',
+      version:    '2021-07-28',
+    };
+
+    /* ---------------- Calendar ---------------- */
+    const WEEKDAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const SLOT_DURATION_MIN = 60;          // 1-hour appointments
+    const CLOSED_WEEKDAYS = [0];           // 0 = Sunday closed; tweak as needed
+    const SLOT_GROUPS = [
+      { label: 'Morning',   times: ['9:00 AM','10:00 AM','11:00 AM'] },
+      { label: 'Afternoon', times: ['12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'] },
+    ];
+    const DAYS_TO_SHOW = 6;    // 2 rows × 3 per row
+
+    let windowStart = null;                // first available date in current view
+    let selectedDate = null;               // Date object
+    let selectedTime = null;               // string e.g. "10:00 AM"
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const dayRow      = document.getElementById('dayRow');
+    const calTitle    = document.getElementById('calTitle');
+    const dateLabel   = document.getElementById('selectedDateLabel');
+    const slotsPanel  = document.getElementById('timeSlots');
+    const slotGrid    = slotsPanel ? slotsPanel.querySelector('.slot-grid') : null;
+    const contactForm = document.getElementById('contactForm');
+    const summaryDT   = document.getElementById('summaryDateTime');
+    const successBox  = document.getElementById('bookingSuccess');
+    const errorBox    = document.getElementById('bookingError');
+    const successText = document.getElementById('successText');
+    const confirmBtn  = document.getElementById('confirmBtn');
+
+    function nextOpenDate(from) {
+      const d = new Date(from);
+      while (CLOSED_WEEKDAYS.includes(d.getDay())) d.setDate(d.getDate() + 1);
+      return d;
+    }
+
+    function buildDayWindow(start) {
+      const days = [];
+      const d = new Date(start);
+      while (days.length < DAYS_TO_SHOW) {
+        if (!CLOSED_WEEKDAYS.includes(d.getDay())) days.push(new Date(d));
+        d.setDate(d.getDate() + 1);
+      }
+      return days;
+    }
+
+    windowStart = nextOpenDate(today);
+
+    function renderCalendar() {
+      const days = buildDayWindow(windowStart);
+      const first = days[0], last = days[days.length - 1];
+      const sameMonth = first.getMonth() === last.getMonth();
+      calTitle.textContent = sameMonth
+        ? `${MONTHS_SHORT[first.getMonth()]} ${first.getFullYear()}`
+        : `${MONTHS_SHORT[first.getMonth()]} – ${MONTHS_SHORT[last.getMonth()]} ${last.getFullYear()}`;
+
+      dayRow.innerHTML = '';
+      days.forEach(dateObj => {
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'day-pill';
+        const isToday = dateObj.getTime() === today.getTime();
+        const isSelected = selectedDate && dateObj.getTime() === selectedDate.getTime();
+        if (isToday) cell.classList.add('today');
+        if (isSelected) cell.classList.add('selected');
+        cell.innerHTML = `
+          <span class="dp-dow">${WEEKDAYS_SHORT[dateObj.getDay()]}</span>
+          <span class="dp-num">${dateObj.getDate()}</span>
+          <span class="dp-mon">${MONTHS_SHORT[dateObj.getMonth()]}</span>
+        `;
+        cell.addEventListener('click', () => selectDate(dateObj));
+        dayRow.appendChild(cell);
+      });
+
+    }
+
+    function timeStrToMinutes(timeStr) {
+      const [t, ampm] = timeStr.split(' ');
+      let [h, m] = t.split(':').map(Number);
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      return h * 60 + m;
+    }
+
+    function renderTimeSlots() {
+      if (!selectedDate || !slotGrid) return;
+      const isToday = selectedDate.getTime() === today.getTime();
+      const now = new Date();
+      const nowMin = now.getHours() * 60 + now.getMinutes();
+      const cutoff = nowMin + 60;  // require at least 1h lead time
+
+      slotGrid.innerHTML = '';
+      let visible = 0;
+
+      SLOT_GROUPS.forEach(group => {
+        const available = group.times.filter(t => !(isToday && timeStrToMinutes(t) <= cutoff));
+        if (available.length === 0) return;
+
+        const heading = document.createElement('p');
+        heading.className = 'slot-group-label';
+        heading.textContent = group.label;
+        slotGrid.appendChild(heading);
+
+        const row = document.createElement('div');
+        row.className = 'slot-row';
+        available.forEach(t => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'slot';
+          btn.dataset.time = t;
+          btn.textContent = t;
+          btn.addEventListener('click', () => selectTime(t, btn));
+          row.appendChild(btn);
+          visible++;
+        });
+        slotGrid.appendChild(row);
+      });
+
+      if (visible === 0) {
+        const note = document.createElement('p');
+        note.className = 'no-slots';
+        note.textContent = 'No more openings today — please choose another date.';
+        slotGrid.appendChild(note);
+      }
+    }
+
+    function selectDate(d) {
+      selectedDate = d;
+      selectedTime = null;
+      renderCalendar();
+
+      const opts = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+      dateLabel.textContent = d.toLocaleDateString(undefined, opts);
+
+      slotsPanel.hidden = false;
+      contactForm.hidden = true;
+      successBox.hidden = true;
+      errorBox.hidden = true;
+
+      renderTimeSlots();
+      setStep(2);
+    }
+
+    function selectTime(timeStr, btn) {
+      selectedTime = timeStr;
+      document.querySelectorAll('.slot').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+
+      const opts = { weekday: 'long', month: 'long', day: 'numeric' };
+      summaryDT.textContent = `${selectedDate.toLocaleDateString(undefined, opts)} at ${timeStr}`;
+
+      contactForm.hidden = false;
+      setStep(3);
+      contactForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function setStep(n) {
+      document.querySelectorAll('.step').forEach(s => {
+        const sn = parseInt(s.dataset.step, 10);
+        s.classList.toggle('active', sn === n);
+        s.classList.toggle('done', sn < n);
+      });
+    }
+
+    renderCalendar();
+
+    // Auto-refresh time slots every minute so today's list stays current
+    setInterval(() => {
+      if (selectedDate && selectedDate.getTime() === today.getTime() && !selectedTime) {
+        renderTimeSlots();
+      }
+    }, 60 * 1000);
+
+    /* ---------------- GHL submission ---------------- */
+    function parseTimeToISO(date, timeStr) {
+      // timeStr like "10:00 AM"
+      const [t, ampm] = timeStr.split(' ');
+      let [h, m] = t.split(':').map(Number);
+      if (ampm === 'PM' && h !== 12) h += 12;
+      if (ampm === 'AM' && h === 12) h = 0;
+      const dt = new Date(date);
+      dt.setHours(h, m, 0, 0);
+      return dt;
+    }
+
+    async function ghlFetch(path, body) {
+      const res = await fetch(GHL.apiBase + path, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + GHL.apiKey,
+          'Version': GHL.version,
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(body),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || ('HTTP ' + res.status));
+      return data;
+    }
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!selectedDate || !selectedTime) return;
+
+      confirmBtn.disabled = true;
+      confirmBtn.textContent = 'Booking…';
+      errorBox.hidden = true;
+
+      const fullName = document.getElementById('fName').value.trim();
+      const [firstName, ...rest] = fullName.split(' ');
+      const lastName = rest.join(' ') || '-';
+      const email    = document.getElementById('fEmail').value.trim();
+      const phone    = document.getElementById('fPhone').value.trim();
+
+      const startDT = parseTimeToISO(selectedDate, selectedTime);
+      const endDT   = new Date(startDT.getTime() + SLOT_DURATION_MIN * 60000);
+
+      try {
+        // 1) Upsert contact
+        const contactRes = await ghlFetch('/contacts/upsert', {
+          locationId: GHL.locationId,
+          firstName, lastName, email, phone,
+          source: 'Non-Surgical Face & Neck Lift LP',
+          tags: ['Face & Neck Lift'],
+        });
+        const contactId = contactRes.contact?.id || contactRes.id;
+
+        // 2) Book appointment on calendar
+        await ghlFetch('/calendars/events/appointments', {
+          calendarId: GHL.calendarId,
+          locationId: GHL.locationId,
+          contactId,
+          assignedUserId: GHL.userId,
+          startTime: startDT.toISOString(),
+          endTime:   endDT.toISOString(),
+          title:     `${fullName} — Face & Neck Lift`,
+          appointmentStatus: 'confirmed',
+        });
+
+        if (window.fbq) fbq('track', 'Lead');
+        contactForm.hidden = true;
+        slotsPanel.hidden = true;
+        successText.textContent =
+          `You're booked for ${summaryDT.textContent}. A confirmation has been sent to ${email}.`;
+        successBox.hidden = false;
+      } catch (err) {
+        console.error('GHL booking error:', err);
+        const detail = errorBox.querySelector('.err-detail');
+        if (detail) detail.textContent = (err && err.message) ? err.message : '';
+        errorBox.hidden = false;
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = 'Confirm My Appointment';
+      }
+    });
+  </script>
+</body>
+</html>
