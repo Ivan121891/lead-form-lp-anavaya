@@ -76,64 +76,79 @@
       </ol>
 
       <div class="booking-card">
-        <div class="booking-grid">
 
-          <!-- Calendar column -->
-          <div class="cal-col">
-            <div class="cal-header">
-              <h3 class="cal-title" id="calTitle">Pick a Date</h3>
-            </div>
-            <div class="day-row" id="dayRow" role="grid"></div>
-            <p class="cal-hint">Choose any of the next 6 available days</p>
+        <!-- STEP 1: Date -->
+        <div class="step-panel active" data-panel="1">
+          <div class="panel-head">
+            <h3 class="panel-title">Choose a Date</h3>
+            <p class="panel-sub">Pick from the next 6 available days at our Naples studio.</p>
           </div>
+          <div class="day-row" id="dayRow" role="grid"></div>
+          <p class="cal-hint">All times shown are Naples local time.</p>
+        </div>
 
-          <!-- Time + form column -->
-          <div class="slot-col">
-            <div class="slot-header">
-              <p class="eyebrow">Selected Date</p>
-              <p class="selected-date" id="selectedDateLabel">Pick a date to see available times</p>
+        <!-- STEP 2: Time -->
+        <div class="step-panel" data-panel="2">
+          <div class="panel-head">
+            <button type="button" class="back-btn" data-back="1">‹ Back</button>
+            <div>
+              <h3 class="panel-title">Choose a Time</h3>
+              <p class="panel-sub" id="selectedDateLabel">Pick a date first</p>
             </div>
-
-            <div class="time-slots" id="timeSlots" hidden>
-              <p class="slot-label">Available Times</p>
-              <div class="slot-grid"></div>
-            </div>
-
-            <form class="contact-form" id="contactForm" hidden>
-              <div class="summary">
-                <p class="summary-line"><strong>Appointment:</strong> <span id="summaryDateTime"></span></p>
-                <p class="summary-line"><strong>Service:</strong> Non-Surgical Face & Neck Lift</p>
-              </div>
-
-              <label>
-                Full Name
-                <input type="text" name="name" id="fName" required placeholder="Jane Doe" autocomplete="name" />
-              </label>
-              <label>
-                Phone
-                <input type="tel" name="phone" id="fPhone" required placeholder="(239) 234-6001" autocomplete="tel" />
-              </label>
-              <label>
-                Email
-                <input type="email" name="email" id="fEmail" required placeholder="you@email.com" autocomplete="email" />
-              </label>
-
-              <button type="submit" class="btn btn-primary btn-lg" id="confirmBtn">Confirm My Appointment</button>
-              <p class="form-foot">Pay upon arrival · You'll receive a confirmation by text & email</p>
-            </form>
-
-            <div class="booking-success" id="bookingSuccess" hidden>
-              <div class="success-icon">✓</div>
-              <h3>Appointment Confirmed!</h3>
-              <p id="successText">Thank you. We'll see you soon at our Naples studio.</p>
-            </div>
-
-            <div class="booking-error" id="bookingError" hidden>
-              <p>We couldn't complete your booking just now. Please call <a href="tel:+12392346001">(239) 234-6001</a> or try again.</p>
-              <p class="err-detail" style="font-size:0.78rem; opacity:0.7; margin-top:6px;"></p>
-            </div>
+          </div>
+          <div class="time-slots" id="timeSlots">
+            <div class="slot-grid"></div>
           </div>
         </div>
+
+        <!-- STEP 3: Form -->
+        <div class="step-panel" data-panel="3">
+          <div class="panel-head">
+            <button type="button" class="back-btn" data-back="2">‹ Back</button>
+            <div>
+              <h3 class="panel-title">Your Details</h3>
+              <p class="panel-sub">We'll send a confirmation by text and email.</p>
+            </div>
+          </div>
+
+          <form class="contact-form" id="contactForm">
+            <div class="summary">
+              <p class="summary-line"><strong>Appointment:</strong> <span id="summaryDateTime"></span></p>
+              <p class="summary-line"><strong>Service:</strong> Non-Surgical Face & Neck Lift</p>
+            </div>
+
+            <label>
+              Full Name
+              <input type="text" name="name" id="fName" required placeholder="Jane Doe" autocomplete="name" />
+            </label>
+            <label>
+              Phone
+              <input type="tel" name="phone" id="fPhone" required placeholder="(239) 234-6001" autocomplete="tel" />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" id="fEmail" required placeholder="you@email.com" autocomplete="email" />
+            </label>
+
+            <button type="submit" class="btn btn-primary btn-lg" id="confirmBtn">Confirm My Appointment</button>
+            <p class="form-foot">Pay upon arrival · You'll receive a confirmation by text & email</p>
+          </form>
+
+          <div class="booking-error" id="bookingError" hidden>
+            <p>We couldn't complete your booking just now. Please call <a href="tel:+12392346001">(239) 234-6001</a> or try again.</p>
+            <p class="err-detail" style="font-size:0.78rem; opacity:0.7; margin-top:6px;"></p>
+          </div>
+        </div>
+
+        <!-- STEP 4: Success -->
+        <div class="step-panel" data-panel="4">
+          <div class="booking-success">
+            <div class="success-icon">✓</div>
+            <h3>Appointment Confirmed!</h3>
+            <p id="successText">Thank you. We'll see you soon at our Naples studio.</p>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -320,6 +335,10 @@
     const SLOT_DURATION_MIN = 60;          // 1-hour appointments
     const CLOSED_WEEKDAYS = [0];           // 0 = Sunday closed; tweak as needed
     const TIMEZONE = 'America/New_York';   // Naples, FL
+    const SLOT_GROUPS = [
+      { label: 'Morning',   hours: [9, 10, 11] },
+      { label: 'Afternoon', hours: [12, 13, 14, 15, 16, 17] },
+    ];
     const DAYS_TO_SHOW = 6;    // 2 rows × 3 per row
 
     let windowStart = null;                // first available date in current view
@@ -330,16 +349,25 @@
     today.setHours(0,0,0,0);
 
     const dayRow      = document.getElementById('dayRow');
-    const calTitle    = document.getElementById('calTitle');
     const dateLabel   = document.getElementById('selectedDateLabel');
     const slotsPanel  = document.getElementById('timeSlots');
     const slotGrid    = slotsPanel ? slotsPanel.querySelector('.slot-grid') : null;
     const contactForm = document.getElementById('contactForm');
     const summaryDT   = document.getElementById('summaryDateTime');
-    const successBox  = document.getElementById('bookingSuccess');
     const errorBox    = document.getElementById('bookingError');
     const successText = document.getElementById('successText');
     const confirmBtn  = document.getElementById('confirmBtn');
+    const panels      = document.querySelectorAll('.step-panel');
+
+    function showPanel(n) {
+      panels.forEach(p => p.classList.toggle('active', parseInt(p.dataset.panel,10) === n));
+      setStep(n);
+      const card = document.querySelector('.booking-card');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    document.querySelectorAll('.back-btn').forEach(b => {
+      b.addEventListener('click', () => showPanel(parseInt(b.dataset.back, 10)));
+    });
 
     function nextOpenDate(from) {
       const d = new Date(from);
@@ -361,12 +389,6 @@
 
     function renderCalendar() {
       const days = buildDayWindow(windowStart);
-      const first = days[0], last = days[days.length - 1];
-      const sameMonth = first.getMonth() === last.getMonth();
-      calTitle.textContent = sameMonth
-        ? `${MONTHS_SHORT[first.getMonth()]} ${first.getFullYear()}`
-        : `${MONTHS_SHORT[first.getMonth()]} – ${MONTHS_SHORT[last.getMonth()]} ${last.getFullYear()}`;
-
       dayRow.innerHTML = '';
       days.forEach(dateObj => {
         const cell = document.createElement('button');
@@ -392,82 +414,57 @@
         hour: 'numeric', minute: '2-digit', hour12: true, timeZone: TIMEZONE
       });
     }
-    function slotHourLocal(iso) {
-      const parts = new Intl.DateTimeFormat('en-US', {
-        hour: 'numeric', hour12: false, timeZone: TIMEZONE
-      }).formatToParts(new Date(iso));
-      const h = parts.find(p => p.type === 'hour');
-      return h ? parseInt(h.value, 10) : new Date(iso).getHours();
-    }
 
-    async function fetchFreeSlots(date) {
-      const start = new Date(date); start.setHours(0,0,0,0);
-      const end   = new Date(date); end.setHours(23,59,59,999);
-      const url = `${GHL.apiBase}/calendars/${GHL.calendarId}/free-slots`
-                + `?startDate=${start.getTime()}&endDate=${end.getTime()}&timezone=${encodeURIComponent(TIMEZONE)}`;
-      const res = await fetch(url, {
-        headers: {
-          'Authorization': 'Bearer ' + GHL.apiKey,
-          'Version': GHL.version,
-          'Accept': 'application/json',
-        },
+    // Build an ISO string for `hour:00` on the selected date in the given timezone.
+    function isoInTz(date, hour, tz) {
+      const guess = new Date(Date.UTC(
+        date.getFullYear(), date.getMonth(), date.getDate(), hour, 0, 0
+      ));
+      const dtf = new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, hour12: false,
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', second: '2-digit'
       });
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || ('HTTP ' + res.status));
-
-      // Response shape: either { "YYYY-MM-DD": { slots: [...] } } or { slots: [...] }
-      let slots = [];
-      if (Array.isArray(data.slots)) slots = data.slots;
-      else {
-        for (const k of Object.keys(data)) {
-          if (data[k] && Array.isArray(data[k].slots)) slots = slots.concat(data[k].slots);
-        }
-      }
-      return slots;   // ISO strings
+      const parts = dtf.formatToParts(guess).reduce((a, p) => {
+        if (p.type !== 'literal') a[p.type] = p.value; return a;
+      }, {});
+      // Some locales return hour=24 for midnight; normalize.
+      let h = parseInt(parts.hour, 10);
+      if (h === 24) h = 0;
+      const asUTC = Date.UTC(parts.year, parts.month - 1, parts.day, h, parts.minute, parts.second);
+      const offsetMs = asUTC - guess.getTime();
+      return new Date(guess.getTime() - offsetMs).toISOString();
     }
 
-    async function renderTimeSlots() {
+    function renderTimeSlots() {
       if (!selectedDate || !slotGrid) return;
-      slotGrid.innerHTML = '<p class="no-slots">Loading available times…</p>';
-
-      let slots = [];
-      try {
-        slots = await fetchFreeSlots(selectedDate);
-      } catch (err) {
-        console.error('free-slots error:', err);
-        slotGrid.innerHTML = `<p class="no-slots">Couldn't load times. Please call (239) 234-6001.</p>`;
-        return;
-      }
 
       const isToday = selectedDate.getTime() === today.getTime();
-      const cutoff = Date.now() + 60 * 60 * 1000;  // 1h lead time
-      const filtered = slots.filter(s => !isToday || new Date(s).getTime() > cutoff);
-
-      const groups = { Morning: [], Afternoon: [] };
-      filtered.forEach(s => {
-        (slotHourLocal(s) < 12 ? groups.Morning : groups.Afternoon).push(s);
-      });
+      const cutoff  = Date.now() + 60 * 60 * 1000;  // 1h lead time
 
       slotGrid.innerHTML = '';
       let visible = 0;
-      ['Morning','Afternoon'].forEach(label => {
-        const items = groups[label];
+
+      SLOT_GROUPS.forEach(group => {
+        const items = group.hours
+          .map(h => ({ hour: h, iso: isoInTz(selectedDate, h, TIMEZONE) }))
+          .filter(it => !isToday || new Date(it.iso).getTime() > cutoff);
         if (!items.length) return;
 
         const heading = document.createElement('p');
         heading.className = 'slot-group-label';
-        heading.textContent = label;
+        heading.textContent = group.label;
         slotGrid.appendChild(heading);
 
         const row = document.createElement('div');
         row.className = 'slot-row';
-        items.forEach(iso => {
+        items.forEach(it => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'slot';
-          btn.dataset.iso = iso;
-          btn.textContent = fmtSlotTime(iso);
-          btn.addEventListener('click', () => selectTime(iso, btn));
+          btn.dataset.iso = it.iso;
+          btn.textContent = fmtSlotTime(it.iso);
+          btn.addEventListener('click', () => selectTime(it.iso, btn));
           row.appendChild(btn);
           visible++;
         });
@@ -475,7 +472,7 @@
       });
 
       if (visible === 0) {
-        slotGrid.innerHTML = '<p class="no-slots">No openings on this date — please choose another day.</p>';
+        slotGrid.innerHTML = '<p class="no-slots">No more openings today — please choose another day.</p>';
       }
     }
 
@@ -487,13 +484,9 @@
       const opts = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
       dateLabel.textContent = d.toLocaleDateString(undefined, opts);
 
-      slotsPanel.hidden = false;
-      contactForm.hidden = true;
-      successBox.hidden = true;
       errorBox.hidden = true;
-
       renderTimeSlots();
-      setStep(2);
+      showPanel(2);
     }
 
     function selectTime(slotIso, btn) {
@@ -504,9 +497,7 @@
       const opts = { weekday: 'long', month: 'long', day: 'numeric' };
       summaryDT.textContent = `${selectedDate.toLocaleDateString(undefined, opts)} at ${fmtSlotTime(slotIso)}`;
 
-      contactForm.hidden = false;
-      setStep(3);
-      contactForm.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      showPanel(3);
     }
 
     function setStep(n) {
@@ -584,11 +575,9 @@
         });
 
         if (window.fbq) fbq('track', 'Lead');
-        contactForm.hidden = true;
-        slotsPanel.hidden = true;
         successText.textContent =
           `You're booked for ${summaryDT.textContent}. A confirmation has been sent to ${email}.`;
-        successBox.hidden = false;
+        showPanel(4);
       } catch (err) {
         console.error('GHL booking error:', err);
         const detail = errorBox.querySelector('.err-detail');
