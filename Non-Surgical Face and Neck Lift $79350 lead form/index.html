@@ -319,10 +319,7 @@
     const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const SLOT_DURATION_MIN = 60;          // 1-hour appointments
     const CLOSED_WEEKDAYS = [0];           // 0 = Sunday closed; tweak as needed
-    const SLOT_GROUPS = [
-      { label: 'Morning',   times: ['9:00 AM','10:00 AM','11:00 AM'] },
-      { label: 'Afternoon', times: ['12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM'] },
-    ];
+    const TIMEZONE = 'America/New_York';   // Naples, FL
     const DAYS_TO_SHOW = 6;    // 2 rows × 3 per row
 
     let windowStart = null;                // first available date in current view
@@ -390,42 +387,87 @@
 
     }
 
-    function timeStrToMinutes(timeStr) {
-      const [t, ampm] = timeStr.split(' ');
-      let [h, m] = t.split(':').map(Number);
-      if (ampm === 'PM' && h !== 12) h += 12;
-      if (ampm === 'AM' && h === 12) h = 0;
-      return h * 60 + m;
+    function fmtSlotTime(iso) {
+      return new Date(iso).toLocaleTimeString('en-US', {
+        hour: 'numeric', minute: '2-digit', hour12: true, timeZone: TIMEZONE
+      });
+    }
+    function slotHourLocal(iso) {
+      const parts = new Intl.DateTimeFormat('en-US', {
+        hour: 'numeric', hour12: false, timeZone: TIMEZONE
+      }).formatToParts(new Date(iso));
+      const h = parts.find(p => p.type === 'hour');
+      return h ? parseInt(h.value, 10) : new Date(iso).getHours();
     }
 
-    function renderTimeSlots() {
+    async function fetchFreeSlots(date) {
+      const start = new Date(date); start.setHours(0,0,0,0);
+      const end   = new Date(date); end.setHours(23,59,59,999);
+      const url = `${GHL.apiBase}/calendars/${GHL.calendarId}/free-slots`
+                + `?startDate=${start.getTime()}&endDate=${end.getTime()}&timezone=${encodeURIComponent(TIMEZONE)}`;
+      const res = await fetch(url, {
+        headers: {
+          'Authorization': 'Bearer ' + GHL.apiKey,
+          'Version': GHL.version,
+          'Accept': 'application/json',
+        },
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || ('HTTP ' + res.status));
+
+      // Response shape: either { "YYYY-MM-DD": { slots: [...] } } or { slots: [...] }
+      let slots = [];
+      if (Array.isArray(data.slots)) slots = data.slots;
+      else {
+        for (const k of Object.keys(data)) {
+          if (data[k] && Array.isArray(data[k].slots)) slots = slots.concat(data[k].slots);
+        }
+      }
+      return slots;   // ISO strings
+    }
+
+    async function renderTimeSlots() {
       if (!selectedDate || !slotGrid) return;
+      slotGrid.innerHTML = '<p class="no-slots">Loading available times…</p>';
+
+      let slots = [];
+      try {
+        slots = await fetchFreeSlots(selectedDate);
+      } catch (err) {
+        console.error('free-slots error:', err);
+        slotGrid.innerHTML = `<p class="no-slots">Couldn't load times. Please call (239) 234-6001.</p>`;
+        return;
+      }
+
       const isToday = selectedDate.getTime() === today.getTime();
-      const now = new Date();
-      const nowMin = now.getHours() * 60 + now.getMinutes();
-      const cutoff = nowMin + 60;  // require at least 1h lead time
+      const cutoff = Date.now() + 60 * 60 * 1000;  // 1h lead time
+      const filtered = slots.filter(s => !isToday || new Date(s).getTime() > cutoff);
+
+      const groups = { Morning: [], Afternoon: [] };
+      filtered.forEach(s => {
+        (slotHourLocal(s) < 12 ? groups.Morning : groups.Afternoon).push(s);
+      });
 
       slotGrid.innerHTML = '';
       let visible = 0;
-
-      SLOT_GROUPS.forEach(group => {
-        const available = group.times.filter(t => !(isToday && timeStrToMinutes(t) <= cutoff));
-        if (available.length === 0) return;
+      ['Morning','Afternoon'].forEach(label => {
+        const items = groups[label];
+        if (!items.length) return;
 
         const heading = document.createElement('p');
         heading.className = 'slot-group-label';
-        heading.textContent = group.label;
+        heading.textContent = label;
         slotGrid.appendChild(heading);
 
         const row = document.createElement('div');
         row.className = 'slot-row';
-        available.forEach(t => {
+        items.forEach(iso => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.className = 'slot';
-          btn.dataset.time = t;
-          btn.textContent = t;
-          btn.addEventListener('click', () => selectTime(t, btn));
+          btn.dataset.iso = iso;
+          btn.textContent = fmtSlotTime(iso);
+          btn.addEventListener('click', () => selectTime(iso, btn));
           row.appendChild(btn);
           visible++;
         });
@@ -433,10 +475,7 @@
       });
 
       if (visible === 0) {
-        const note = document.createElement('p');
-        note.className = 'no-slots';
-        note.textContent = 'No more openings today — please choose another date.';
-        slotGrid.appendChild(note);
+        slotGrid.innerHTML = '<p class="no-slots">No openings on this date — please choose another day.</p>';
       }
     }
 
@@ -457,13 +496,13 @@
       setStep(2);
     }
 
-    function selectTime(timeStr, btn) {
-      selectedTime = timeStr;
+    function selectTime(slotIso, btn) {
+      selectedTime = slotIso;
       document.querySelectorAll('.slot').forEach(b => b.classList.remove('selected'));
       btn.classList.add('selected');
 
       const opts = { weekday: 'long', month: 'long', day: 'numeric' };
-      summaryDT.textContent = `${selectedDate.toLocaleDateString(undefined, opts)} at ${timeStr}`;
+      summaryDT.textContent = `${selectedDate.toLocaleDateString(undefined, opts)} at ${fmtSlotTime(slotIso)}`;
 
       contactForm.hidden = false;
       setStep(3);
@@ -488,17 +527,6 @@
     }, 60 * 1000);
 
     /* ---------------- GHL submission ---------------- */
-    function parseTimeToISO(date, timeStr) {
-      // timeStr like "10:00 AM"
-      const [t, ampm] = timeStr.split(' ');
-      let [h, m] = t.split(':').map(Number);
-      if (ampm === 'PM' && h !== 12) h += 12;
-      if (ampm === 'AM' && h === 12) h = 0;
-      const dt = new Date(date);
-      dt.setHours(h, m, 0, 0);
-      return dt;
-    }
-
     async function ghlFetch(path, body) {
       const res = await fetch(GHL.apiBase + path, {
         method: 'POST',
@@ -529,8 +557,9 @@
       const email    = document.getElementById('fEmail').value.trim();
       const phone    = document.getElementById('fPhone').value.trim();
 
-      const startDT = parseTimeToISO(selectedDate, selectedTime);
-      const endDT   = new Date(startDT.getTime() + SLOT_DURATION_MIN * 60000);
+      // selectedTime now holds the exact ISO slot returned by GHL's /free-slots
+      const startISO = selectedTime;
+      const endISO   = new Date(new Date(startISO).getTime() + SLOT_DURATION_MIN * 60000).toISOString();
 
       try {
         // 1) Upsert contact
@@ -548,8 +577,8 @@
           locationId: GHL.locationId,
           contactId,
           assignedUserId: GHL.userId,
-          startTime: startDT.toISOString(),
-          endTime:   endDT.toISOString(),
+          startTime: startISO,
+          endTime:   endISO,
           title:     `${fullName} — Face & Neck Lift`,
           appointmentStatus: 'confirmed',
         });
