@@ -289,7 +289,7 @@
     <div class="container footer-grid">
       <div>
         <h3>Location</h3>
-        <p>472 5th Avenue South<br />Naples, FL 34102</p>
+        <p>775 5th Ave South<br />Naples, FL 34102</p>
       </div>
       <div>
         <h3>Email</h3>
@@ -333,7 +333,7 @@
     const WEEKDAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     const MONTHS_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     const SLOT_DURATION_MIN = 60;          // 1-hour appointments
-    const CLOSED_WEEKDAYS = [0];           // 0 = Sunday closed; tweak as needed
+    const CLOSED_WEEKDAYS = [0, 6];        // 0 = Sunday, 6 = Saturday — closed weekends
     const TIMEZONE = 'America/New_York';   // Naples, FL
     const SLOT_GROUPS = [
       { label: 'Morning',   hours: [9, 10, 11] },
